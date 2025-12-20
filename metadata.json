@@ -1,0 +1,7 @@
+{
+  "name": "The Grass Guy - Premier Lawn Care",
+  "description": "A high-performance, AI-enhanced professional lawn care platform offering instant estimates, service scheduling, and a comprehensive client portal.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
