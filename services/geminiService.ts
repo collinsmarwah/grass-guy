@@ -2,12 +2,14 @@
 import { GoogleGenAI } from "@google/genai";
 import { ChatMessage } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+// Always use the direct process.env.API_KEY as per guidelines
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 export const getLawnCareAdvice = async (history: ChatMessage[], prompt: string): Promise<string> => {
   try {
-    const chat = ai.chats.create({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
+      contents: prompt,
       config: {
         systemInstruction: `You are 'The Grass Guy', a friendly, professional lawn care expert. 
         Your goal is to help customers with lawn maintenance tips and answer questions about their yard. 
@@ -17,7 +19,6 @@ export const getLawnCareAdvice = async (history: ChatMessage[], prompt: string):
       },
     });
 
-    const response = await chat.sendMessage({ message: prompt });
     return response.text || "I'm sorry, I couldn't process that request right now. How else can I help your lawn today?";
   } catch (error) {
     console.error("Gemini API Error:", error);
