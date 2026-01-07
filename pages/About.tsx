@@ -16,7 +16,7 @@ const About: React.FC = () => {
               Born in the <br /> <span className="text-primary not-italic">Florida Sun.</span>
             </h1>
             <p className="text-xl text-text-muted dark:text-gray-300 font-medium leading-relaxed">
-              Started as a two-man operation with a push mower and a dream, The Grass Guy has grown into Springfield's most trusted name in high-performance lawn care. We don't just mow; we maintain the standard for neighborhood excellence.
+              Started as a two-man operation with a push mower and a dream, The Grass Guy has grown into Clearwater's most trusted name in high-performance lawn care. We don't just mow; we maintain the standard for neighborhood excellence.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">

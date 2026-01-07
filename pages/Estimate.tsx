@@ -1,20 +1,62 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { generateSmartEstimate } from '../services/geminiService';
 
 const Estimate: React.FC = () => {
+  const routerLocation = useLocation();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     address: '',
     description: '',
+    phone: '',
   });
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [loading, setLoading] = useState(false);
   const [aiPreview, setAiPreview] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  // Pre-fill data from hero if available
+  useEffect(() => {
+    const heroData = routerLocation.state?.heroData;
+    if (heroData) {
+      const names = heroData.name.split(' ');
+      
+      // Construct description from notes and lawn size
+      let description = heroData.notes || '';
+      if (heroData.lawnSize) {
+        description = `[Size: ${heroData.lawnSize}] ${description}`;
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        firstName: names[0] || '',
+        lastName: names.slice(1).join(' ') || '',
+        address: heroData.address || '',
+        phone: heroData.phone || '',
+        description: description.trim()
+      }));
+
+      // Optionally auto-trigger estimate if enough info is provided
+      if (heroData.address) {
+        // Triggering automatic analysis for hero leads
+        const autoSubmit = async () => {
+           setLoading(true);
+           try {
+             const promptDesc = `Lawn Size: ${heroData.lawnSize || 'Unknown'}. User Notes: ${heroData.notes || 'None'}. Standard lawn care analysis requested.`;
+             const preview = await generateSmartEstimate(heroData.address, promptDesc);
+             setAiPreview(preview);
+             setSubmitted(true);
+           } catch (e) { console.error(e); }
+           setLoading(false);
+        };
+        autoSubmit();
+      }
+    }
+  }, [routerLocation.state]);
 
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
@@ -78,7 +120,7 @@ const Estimate: React.FC = () => {
                 The Grass <br /> Is <span className="text-primary not-italic">Greener</span> <br /> Right Here.
               </h1>
               <p className="text-xl text-text-muted dark:text-gray-400 font-medium mt-8 leading-relaxed max-w-lg">
-                Fill out the form to the right. Our AI-assisted system will provide an instant overview of your lawn's needs while our team works on a formal proposal.
+                Our AI-assisted system will provide an instant overview of your lawn's needs while our team works on a formal proposal.
               </p>
             </div>
 
@@ -112,9 +154,15 @@ const Estimate: React.FC = () => {
                       <input required name="lastName" value={formData.lastName} onChange={handleChange} type="text" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Email Address</label>
-                    <input required name="email" value={formData.email} onChange={handleChange} type="email" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Email Address</label>
+                      <input required name="email" value={formData.email} onChange={handleChange} type="email" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Phone Number</label>
+                      <input required name="phone" value={formData.phone} onChange={handleChange} type="tel" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -128,7 +176,7 @@ const Estimate: React.FC = () => {
                         {locating ? 'LOCATING...' : location ? 'LOCATION DETECTED' : 'USE MY LOCATION'}
                       </button>
                     </div>
-                    <input required name="address" value={formData.address} onChange={handleChange} type="text" placeholder="123 Green Way, Springfield" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
+                    <input required name="address" value={formData.address} onChange={handleChange} type="text" placeholder="2519 McMullen Booth Rd" className="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-4 focus:ring-primary focus:border-primary dark:text-white" />
                     {location && (
                       <p className="text-[9px] font-bold text-primary uppercase tracking-tighter">
                         Coordinates: {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}

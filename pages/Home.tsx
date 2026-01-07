@@ -1,87 +1,212 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SERVICES } from '../constants';
+import { generateSmartEstimate } from '../services/geminiService';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    address: '',
+    lawnSize: '',
+    notes: ''
+  });
+
+  const handleHeroSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    // We redirect to the full estimate page with these details pre-filled or just show a quick preview
+    // For now, let's process it and navigate to the estimate page to show the AI result
+    try {
+      // Small delay to simulate precision analysis
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      navigate('/estimate', { state: { heroData: formData } });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const testimonials = [
     {
       id: 1,
-      initial: 'T',
+      initial: 'G',
       color: 'bg-[#004e89]',
       stars: 5,
-      text: '"Quick and affordable lawn care service. Will be using them in t..."',
-      author: 'Tyrone Clark',
-      date: '11/13/2025'
+      text: '"Great service and very reliable, highly recommend. They showed up exactly when promised and did an excellent job."',
+      author: 'Google Reviewer',
+      date: 'Recent'
     },
     {
       id: 2,
-      initial: '',
-      color: 'bg-black',
-      stars: 2,
-      text: '"The Grass guy cut my grass for about 3 years. They did a dec..."',
-      author: 'Casey Gordon',
-      date: '11/10/2025'
+      initial: 'V',
+      color: 'bg-primary',
+      stars: 5,
+      text: '"Very pleased with their work. My lawn has never looked better. Professional and courteous team."',
+      author: 'Verified Customer',
+      date: '2 months ago'
     },
     {
       id: 3,
-      initial: 'J',
+      initial: 'C',
       color: 'bg-[#b91c1c]',
       stars: 5,
-      text: '"Great service and very reliable, highly recommend"',
-      author: 'Jessica Cervera',
-      date: '6/12/2025'
+      text: '"They have all these qualities but also… their prices are totally competitive. Best value in Clearwater."',
+      author: 'Client',
+      date: '4 months ago'
     }
   ];
 
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative h-[90vh] min-h-[600px] flex items-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/u7l9bxCV7nXBWNmJVZXP/media/68905ec318e40eeaf2b9fdae.png" 
             alt="Beautiful green lawn" 
-            className="w-full h-full object-cover brightness-[0.4]"
+            className="w-full h-full object-cover brightness-[0.35] scale-105"
           />
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="max-w-3xl">
-            <span className="inline-block px-4 py-1.5 bg-primary/20 text-primary text-xs font-black uppercase tracking-widest rounded-full mb-6 border border-primary/30">
-              Florida's #1 Rated Lawn Care
-            </span>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8 italic uppercase">
-              Your Lawn, <br />
-              <span className="text-primary not-italic">Our Obsession.</span>
-            </h1>
-            <p className="text-xl text-gray-300 font-medium mb-10 max-w-xl leading-relaxed">
-              Ditch the DIY drama. We deliver precision mowing, expert fertilization, and relentless weed control so you can actually enjoy your weekends.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-5">
-              <Link to="/estimate" className="bg-primary hover:bg-primary-dark text-background-dark px-10 py-5 rounded-full text-lg font-black transition-all transform hover:scale-105 shadow-xl shadow-primary/20 flex items-center justify-center gap-2">
-                GET A FREE QUOTE
-                <span className="material-symbols-outlined font-bold">arrow_forward</span>
-              </Link>
-              <Link to="/services" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 px-10 py-5 rounded-full text-lg font-black transition-all flex items-center justify-center">
-                OUR SERVICES
-              </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Hero Text */}
+            <div className="max-w-3xl">
+              <span className="inline-block px-4 py-1.5 bg-primary/20 text-primary text-xs font-black uppercase tracking-widest rounded-full mb-6 border border-primary/30 backdrop-blur-sm">
+                Florida's #1 Rated Lawn Care
+              </span>
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8 italic uppercase">
+                Your Lawn, <br />
+                <span className="text-primary not-italic">Our Obsession.</span>
+              </h1>
+              <p className="text-xl text-gray-300 font-medium mb-10 max-w-xl leading-relaxed">
+                Ditch the DIY drama. We deliver precision mowing and relentless weed control so you can actually enjoy your weekends.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-5">
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    {[1,2,3,4].map(i => (
+                      <img key={i} src={`https://picsum.photos/seed/user${i}/100/100`} className="w-10 h-10 rounded-full border-2 border-background-dark" alt="User" />
+                    ))}
+                  </div>
+                  <div>
+                    <div className="flex text-primary">
+                      {[1,2,3,4,5].map(s => <span key={s} className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 1"}}>star</span>)}
+                    </div>
+                    <p className="text-[10px] text-white/60 font-black uppercase tracking-widest">500+ Neighbors Trust Us</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Hero Form */}
+            <div className="relative animate-in fade-in slide-in-from-right-10 duration-1000 delay-300">
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 sm:p-12 rounded-[3rem] shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-bl-full blur-2xl"></div>
+                
+                <div className="relative z-10">
+                  <h2 className="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Get Your Quote</h2>
+                  <p className="text-gray-300 text-sm font-bold uppercase tracking-widest mb-8">Instant AI Analysis in 60 Seconds</p>
+                  
+                  <form onSubmit={handleHeroSubmit} className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2">Your Name</label>
+                      <input 
+                        required 
+                        type="text" 
+                        placeholder="John Doe"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        className="w-full bg-white/5 border-white/10 rounded-2xl p-4 text-white focus:ring-primary focus:border-primary placeholder:text-white/20 transition-all" 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2">Phone Number</label>
+                      <input 
+                        required 
+                        type="tel" 
+                        placeholder="(727) 000-0000"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className="w-full bg-white/5 border-white/10 rounded-2xl p-4 text-white focus:ring-primary focus:border-primary placeholder:text-white/20 transition-all" 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2">Property Address</label>
+                      <input 
+                        required 
+                        type="text" 
+                        placeholder="123 Oak Avenue"
+                        value={formData.address}
+                        onChange={(e) => setFormData({...formData, address: e.target.value})}
+                        className="w-full bg-white/5 border-white/10 rounded-2xl p-4 text-white focus:ring-primary focus:border-primary placeholder:text-white/20 transition-all" 
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2">Lawn Size</label>
+                        <select
+                          value={formData.lawnSize}
+                          onChange={(e) => setFormData({...formData, lawnSize: e.target.value})}
+                          className="w-full bg-white/5 border-white/10 rounded-2xl p-4 text-white focus:ring-primary focus:border-primary placeholder:text-white/20 transition-all [&>option]:bg-background-dark [&>option]:text-white appearance-none"
+                        >
+                          <option value="" disabled className="text-gray-500">Approx. Size</option>
+                          <option value="Small (< 0.25 acre)">Small (&lt; 0.25 acre)</option>
+                          <option value="Medium (0.25-0.5 acre)">Medium (0.25-0.5 acre)</option>
+                          <option value="Large (0.5-1 acre)">Large (0.5-1 acre)</option>
+                          <option value="Estate (> 1 acre)">Estate (&gt; 1 acre)</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2">Additional Notes</label>
+                         <textarea
+                           placeholder="Pets, gate code..."
+                           value={formData.notes}
+                           onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                           rows={1}
+                           className="w-full bg-white/5 border-white/10 rounded-2xl p-4 text-white focus:ring-primary focus:border-primary placeholder:text-white/20 transition-all resize-none overflow-hidden h-[58px]"
+                         />
+                      </div>
+                    </div>
+                    
+                    <button 
+                      disabled={loading}
+                      type="submit"
+                      className="w-full bg-primary hover:bg-primary-dark text-background-dark py-5 rounded-2xl font-black text-lg shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 mt-4"
+                    >
+                      {loading ? (
+                        <span className="animate-spin material-symbols-outlined">progress_activity</span>
+                      ) : (
+                        <>
+                          GET MY ESTIMATE
+                          <span className="material-symbols-outlined font-bold">arrow_forward</span>
+                        </>
+                      )}
+                    </button>
+                    
+                    <p className="text-[9px] text-center text-white/40 font-bold uppercase tracking-widest mt-6">
+                      <span className="material-symbols-outlined text-[10px] align-middle mr-1">security</span>
+                      Your data is secured & never sold.
+                    </p>
+                  </form>
+                </div>
+              </div>
+              
+              {/* Floating Badge */}
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce duration-[3000ms]">
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined font-bold">verified</span>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-text-main uppercase">Licensed & Insured</p>
+                  <p className="text-[8px] font-bold text-text-muted uppercase">FL-STATE #49202</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {/* Floating Stats */}
-        <div className="hidden lg:block absolute bottom-12 right-12 z-10 animate-in fade-in slide-in-from-right-10 duration-1000">
-           <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl grid grid-cols-2 gap-10">
-              <div>
-                <p className="text-primary text-4xl font-black">500+</p>
-                <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-1">Happy Lawns</p>
-              </div>
-              <div>
-                <p className="text-primary text-4xl font-black">4.9/5</p>
-                <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-1">Star Rating</p>
-              </div>
-           </div>
         </div>
       </section>
 

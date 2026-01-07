@@ -37,7 +37,7 @@ const Portal: React.FC = () => {
                  </div>
                  <div>
                    <h2 className="text-2xl font-black dark:text-white uppercase tracking-tight">John Doe</h2>
-                   <p className="text-text-muted text-sm font-bold uppercase tracking-widest">Premium Monthly Plan • Springfield, FL</p>
+                   <p className="text-text-muted text-sm font-bold uppercase tracking-widest">Premium Monthly Plan • Clearwater, FL</p>
                  </div>
                </div>
                

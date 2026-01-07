@@ -40,7 +40,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-widest text-text-muted mb-1">Call Us Directly</h4>
-                  <p className="text-2xl font-black italic dark:text-white">(555) 472-7748</p>
+                  <p className="text-2xl font-black italic dark:text-white">(727) 300-1963</p>
                 </div>
               </div>
 
@@ -50,7 +50,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-widest text-text-muted mb-1">Email Our Team</h4>
-                  <p className="text-2xl font-black italic dark:text-white">hello@thegrassguy.com</p>
+                  <p className="text-2xl font-black italic dark:text-white">info@grassguylawns.com</p>
                 </div>
               </div>
 
@@ -60,7 +60,8 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-widest text-text-muted mb-1">Our Main HQ</h4>
-                  <p className="text-2xl font-black italic dark:text-white">Springfield, FL 32789</p>
+                  <p className="text-xl font-black italic dark:text-white">Clearwater, FL 33761</p>
+                  <p className="text-sm font-bold text-primary mt-1">Opens 8:00 AM</p>
                 </div>
               </div>
             </div>

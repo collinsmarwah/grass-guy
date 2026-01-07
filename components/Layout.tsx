@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
               <span className="text-2xl font-black tracking-tighter text-text-main dark:text-white">THE GRASS GUY</span>
             </Link>
             <p className="text-text-muted dark:text-gray-400 max-w-sm mb-8">
-              Florida's premier lawn care specialists. We combine neighborly service with expert turf management to give you the greenest lawn on the block.
+              Clearwater's premier lawn care specialists. We combine neighborly service with expert turf management to give you the greenest lawn on the block.
             </p>
             <div className="flex gap-4">
               {['facebook', 'instagram', 'youtube'].map(social => (
@@ -122,15 +122,15 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <p className="flex items-start gap-3 text-text-muted dark:text-gray-400 font-medium">
                 <span className="material-symbols-outlined text-primary text-xl">location_on</span>
-                742 Evergreen Terrace,<br />Springfield, FL 32789
+                2519 McMullen Booth Rd,<br />Clearwater, FL 33761
               </p>
               <p className="flex items-center gap-3 text-text-muted dark:text-gray-400 font-medium">
                 <span className="material-symbols-outlined text-primary text-xl">call</span>
-                (555) 472-7748
+                (727) 300-1963
               </p>
               <p className="flex items-center gap-3 text-text-muted dark:text-gray-400 font-medium">
                 <span className="material-symbols-outlined text-primary text-xl">mail</span>
-                hello@thegrassguy.com
+                info@grassguylawns.com
               </p>
             </div>
           </div>
@@ -138,7 +138,7 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-gray-100 dark:border-gray-800 pt-10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-muted dark:text-gray-500 font-medium">
-            © 2025 The Grass Guy. Licensed & Insured. All rights reserved.
+            © 2026 The Grass Guy. Licensed & Insured. All rights reserved.
           </p>
           <div className="flex gap-8">
             <a href="#" className="text-xs font-bold text-text-muted dark:text-gray-500 hover:text-primary">PRIVACY POLICY</a>

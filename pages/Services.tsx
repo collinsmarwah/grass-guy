@@ -61,7 +61,7 @@ const Services: React.FC = () => {
         <div className="mt-32 bg-gray-50 dark:bg-gray-900 rounded-[4rem] p-12 lg:p-20 text-center border border-gray-100 dark:border-gray-800">
            <h3 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter dark:text-white leading-none mb-8">Ready to Level Up?</h3>
            <p className="text-xl text-text-muted dark:text-gray-400 font-medium max-w-2xl mx-auto mb-12">
-             Don't wait for your lawn to decline. Join hundreds of Springfield neighbors who trust The Grass Guy with their home's first impression.
+             Don't wait for your lawn to decline. Join hundreds of Clearwater neighbors who trust The Grass Guy with their home's first impression.
            </p>
            <Link to="/estimate" className="inline-block bg-primary hover:bg-primary-dark text-background-dark px-12 py-6 rounded-full text-xl font-black transition-all shadow-xl shadow-primary/20">
              START YOUR JOURNEY
